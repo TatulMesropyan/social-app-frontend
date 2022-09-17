@@ -12,7 +12,6 @@ export const Registration = ({
           KiloGram
         </Typography>
         <Grid
-          xs={12}
           container
           sx={{
             paddingRight: "175px",
@@ -34,7 +33,7 @@ export const Registration = ({
             />
           </Grid>
         </Grid>
-        <Grid xs={12} container spacing={2} sx={{ padding: "15px 160px" }}>
+        <Grid container spacing={2} sx={{ padding: "15px 160px" }}>
           <Grid xs={6} item>
             <TextField
               placeholder="Enter your email"
@@ -62,7 +61,7 @@ export const Registration = ({
             />
           </Grid>
         </Grid>
-        <Grid xs={12} container spacing={2} sx={{ padding: "15px 160px" }}>
+        <Grid container spacing={2} sx={{ padding: "15px 160px" }}>
           <Grid xs={6} item>
             <TextField
               placeholder="Enter your password"

@@ -15,13 +15,7 @@ function App() {
 
     const sendPostRequest = async () => {
         try {
-            const resp = await axios.post('localhost.6006/posts', {
-                username: registrationData.username,
-                email: registrationData.email,
-                phone: registrationData.phone,
-                password: registrationData.password,
-                confirmPassword: registrationData.confirmPassword
-            });
+            const resp = await axios.post('localhost.6006/posts', registrationData );
             console.log(resp.data);
         } catch (err) {
             // Handle Error Here
