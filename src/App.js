@@ -16,29 +16,20 @@ function App() {
     console.log(registrationData.username)
 
     const sendPostRequest = async () => {
-        console.log('Clicked')
         try {
             await axios.post(
-                'http://localhost:8080/posts', registrationData.username, registrationData.email
+                'http://localhost:8080/posts', {
+                    username:registrationData.username,
+                    email:registrationData.email,
+                    phone:registrationData.password,
+                    password:registrationData.password,
+                    confirmPassword:registrationData.confirmPassword
+                }
             )
         }
         catch (err) {
             console.error(err)
         }
-        // try {
-        //     const { data } = await axios.post(
-        //         'https://localhost.8080/posts',
-        //         registrationData.username, Registration.email
-        //     );
-
-        //     const resp = await axios.post('localhost.8080/posts', {
-        //         method: 'POST',
-        //     });
-        //     console.log(resp.data);
-        // } catch (err) {
-        //     // Handle Error Here
-        //     console.error(err);
-        // }
     };
 
     return (
