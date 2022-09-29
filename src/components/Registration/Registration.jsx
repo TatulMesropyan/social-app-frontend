@@ -1,6 +1,7 @@
 import { Box, Button, Grid, Paper, TextField, Typography } from "@mui/material";
 
 export const Registration = ({
+  getData,
   registrationData,
   setRegistrationData,
   sendPostRequest,
