@@ -1,6 +1,6 @@
 import { Box, Button, Divider, Paper, Typography } from "@mui/material";
 
-export const ProfilePage = ({ data, getData }) => {
+export const ProfilePage = ({ data, getData, removeUser}) => {
   return (
     <Box sx={{ textAlign: "center" }}>
       <Paper>
@@ -31,11 +31,20 @@ export const ProfilePage = ({ data, getData }) => {
         ))}
         <Button
           variant="contained"
-          color="error"
+          color="success"
           onClick={() => getData()}
           fullWidth
         >
           Get Data
+        </Button>
+        <Button
+            sx={{marginTop:'15px'}}
+            variant="contained"
+            color="error"
+            onClick={() => removeUser()}
+            fullWidth
+        >
+          Remove user Data
         </Button>
       </Paper>
     </Box>

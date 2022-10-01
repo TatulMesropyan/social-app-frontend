@@ -18,7 +18,7 @@ function App() {
     const sendPostRequest = async () => {
         try {
             await axios.post(
-                'http://localhost:8080/posts', {
+                'http://localhost:8080/registration', {
                 username: registrationData.username,
                 email: registrationData.email,
                 phone: registrationData.password,
@@ -33,14 +33,18 @@ function App() {
     };
 
     const getData = async () => {
-        const response = await axios.get('http://localhost:8080/posts')
+        const response = await axios.get('http://localhost:8080/registration')
         setDataComingBE(response.data)
+    }
+
+    const deleteUser = async () => {
+        await axios.delete('http://localhost:8080/registration',)
     }
 
     return (
         <>
             <Registration getData={getData} registrationData={registrationData} sendPostRequest={sendPostRequest} setRegistrationData={setRegistrationData} />
-            <ProfilePage getData={getData} data={dataComingBE} />
+            <ProfilePage getData={getData} data={dataComingBE} removeUser={deleteUser} />
         </>
     );
 }
