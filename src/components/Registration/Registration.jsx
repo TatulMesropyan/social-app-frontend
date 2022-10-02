@@ -1,6 +1,7 @@
 import { Box, Button, Grid, Paper, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 export const Registration = () => {
     const [registrationData, setRegistrationData] = useState({
@@ -12,6 +13,7 @@ export const Registration = () => {
     });
     const [validation,setValidation] = useState(false)
     const [isPasswordsValid,setIsPasswordsValid] = useState(false)
+    const navigate = useNavigate()
 
     const sendRegisteredData = async () => {
         try {
@@ -23,6 +25,7 @@ export const Registration = () => {
                     password: registrationData.password,
                 }
             )
+            navigate('/login')
         }
         catch (err) {
             console.error(err)
@@ -111,6 +114,7 @@ export const Registration = () => {
             disabled={!isPasswordsValid||!validation}
             onClick={() => sendRegisteredData()}
             fullWidth
+            variant='contained'
           >
             Sign up
           </Button>
