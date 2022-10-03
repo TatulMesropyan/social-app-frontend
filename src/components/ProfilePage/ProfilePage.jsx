@@ -1,14 +1,14 @@
 import { Box, Button, Divider, Paper, Typography } from "@mui/material";
 import axios from "axios";
-import {useState} from "react";
+import { useState } from "react";
 
 export const ProfilePage = () => {
-  const [data,setData] = useState()
+  const [data, setData] = useState();
 
   const getData = async () => {
-    const response = await axios.get('http://localhost:8080/registration')
-    setData(response.data)
-  }
+    const response = await axios.get("http://localhost:8080/registration");
+    setData(response.data);
+  };
 
   return (
     <Box sx={{ textAlign: "center" }}>
