@@ -1,7 +1,7 @@
 import { Box, Button, Grid, Paper, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { resolvePath, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const Registration = () => {
   const [registrationData, setRegistrationData] = useState({
@@ -17,21 +17,20 @@ export const Registration = () => {
 
   const sendRegisteredData = async () => {
     try {
-      const registerUser = await axios.post(
+       const registerUser = await axios.post(
         "http://localhost:8080/registration",
         {
           username: registrationData.username,
           email: registrationData.email,
-          phone: registrationData.password,
+          phone: registrationData.phone,
           password: registrationData.password,
+          confirmPassword: registrationData.confirmationPassword,
         }
       );
-      const response = await registerUser;
-      if (response.statusText === "OK") {
-        navigate("/login");
+      navigate("/login");
       }
-    } catch (err) {
-      console.error(err);
+     catch (err) {
+      alert(err.response.data.error);
     }
   };
 

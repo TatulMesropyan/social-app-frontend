@@ -4,14 +4,15 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
-  const [loginData, setLoginData] = useState({});
   const navigate = useNavigate();
+  const [loginData, setLoginData] = useState({});
   const handleSendData = async () => {
     try {
-      await axios.post("http://localhost:8080/login", {
+      const response = await axios.post("http://localhost:8080/login", {
         username: loginData.username,
         password: loginData.password,
       });
+      console.log(response);
     } catch (err) {
       console.error(err);
     }

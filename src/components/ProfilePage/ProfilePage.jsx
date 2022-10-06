@@ -7,6 +7,7 @@ export const ProfilePage = () => {
 
   const getData = async () => {
     const response = await axios.get("http://localhost:8080/registration");
+    console.log(response.data);
     setData(response.data);
   };
 
