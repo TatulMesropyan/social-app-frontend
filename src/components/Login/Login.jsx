@@ -3,7 +3,7 @@ import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-export const Login = () => {
+export const Login = ({saveUserData}) => {
   const navigate = useNavigate();
   const [loginData, setLoginData] = useState({});
   const handleSendData = async () => {
@@ -12,7 +12,8 @@ export const Login = () => {
         username: loginData.username,
         password: loginData.password,
       });
-      console.log(response);
+      saveUserData(response.data.user)
+        localStorage.setItem("Token",response.data.token)
     } catch (err) {
       console.error(err);
     }

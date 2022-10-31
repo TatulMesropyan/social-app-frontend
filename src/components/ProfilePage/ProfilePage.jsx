@@ -1,23 +1,17 @@
 import { Box, Button, Divider, Paper, Typography } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
+import {useParams} from "react-router-dom";
 
-export const ProfilePage = () => {
-  const [data, setData] = useState();
-
-  const getData = async () => {
-    const response = await axios.get("http://localhost:8080/registration");
-    console.log(response.data);
-    setData(response.data);
-  };
-
-  return (
+export const ProfilePage = ({user}) => {
+    const {username,email,phone,_id} = user;
+    
+      return (
     <Box sx={{ textAlign: "center" }}>
       <Paper>
         <Typography paddingBottom="40px" variant="h1">
           Profile
         </Typography>
-        {data?.map((itm) => (
           <Box
             sx={{
               display: "flex",
@@ -26,23 +20,21 @@ export const ProfilePage = () => {
             }}
           >
             <Box sx={{ display: "flex", direction: "row" }}>
-              <Typography variant="h6">Name: {itm.username}</Typography>
+              <Typography variant="h6">Name: {username}</Typography>
               <Divider />
             </Box>
             <Box sx={{ display: "flex", direction: "row" }}>
-              <Typography variant="h6">Email: {itm.email}</Typography>
+                <Typography variant="h6">Email: {email}</Typography>
               <Divider orientation="horizontal" />
             </Box>
             <Box sx={{ display: "flex", direction: "row" }}>
-              <Typography variant="h6">Phone: {itm.phone}</Typography>
+                <Typography variant="h6">Phone: {phone}</Typography>
               <Divider orientation="horizontal" />
             </Box>
           </Box>
-        ))}
         <Button
           variant="contained"
           color="success"
-          onClick={() => getData()}
           fullWidth
         >
           Get Data

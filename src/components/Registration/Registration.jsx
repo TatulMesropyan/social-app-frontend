@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 export const Registration = () => {
   const [registrationData, setRegistrationData] = useState({
     username: "",
-    phone: "",
+    phone: 0,
     password: "",
     email: "",
     confirmationPassword: "",
@@ -93,6 +93,7 @@ export const Registration = () => {
             <TextField
               placeholder="Enter your phone"
               fullWidth
+              // type='number'
               onChange={(e) => handleFieldChange("phone", e)}
             />
           </Grid>
