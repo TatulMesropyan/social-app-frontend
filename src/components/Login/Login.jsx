@@ -1,23 +1,27 @@
-import { useState } from "react";
+import {useState} from "react";
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export const Login = ({saveUserData}) => {
   const navigate = useNavigate();
-  const [loginData, setLoginData] = useState({});
+  const [loginData, setLoginData] = useState({
+    login:'',
+    password:''
+  });
+
   const handleSendData = async () => {
     try {
       const response = await axios.post("http://localhost:8080/login", {
         username: loginData.username,
         password: loginData.password,
-      });
+      })
+      sessionStorage.setItem("Token",response.data.token)
       saveUserData(response.data.user)
-        localStorage.setItem("Token",response.data.token)
+      navigate("/profile");
     } catch (err) {
-      console.error(err);
+      alert(err?.response?.data?.msg);
     }
-    navigate("/profile");
   };
 
   return (
@@ -30,7 +34,6 @@ export const Login = ({saveUserData}) => {
           <TextField
             fullWidth
             placeholder="Username"
-            value={loginData.username}
             onChange={(e) =>
               setLoginData({ ...loginData, username: e.target.value })
             }
@@ -39,7 +42,6 @@ export const Login = ({saveUserData}) => {
             fullWidth
             placeholder="Password"
             type="password"
-            value={loginData.password}
             onChange={(e) =>
               setLoginData({ ...loginData, password: e.target.value })
             }

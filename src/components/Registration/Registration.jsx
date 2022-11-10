@@ -93,7 +93,6 @@ export const Registration = () => {
             <TextField
               placeholder="Enter your phone"
               fullWidth
-              // type='number'
               onChange={(e) => handleFieldChange("phone", e)}
             />
           </Grid>
