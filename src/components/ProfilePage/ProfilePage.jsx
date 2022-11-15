@@ -5,6 +5,7 @@ import {RemoveCircle} from "@mui/icons-material";
 
 export const ProfilePage = ({user}) => {
     const [showCreateDialog,setShowCreateDialog] = useState(false)
+    const [showDeleteDialog,setShowDeleteDialog] = useState(false)
     const [posts,setPosts] = useState([{}])
     const [newPost,setNewPost] = useState({
         title:'',
@@ -63,6 +64,9 @@ const submitNewPost = async () => {
             .catch(console.error);
     },[_id,showCreateDialog]);
 
+const handleSubmitDelete = useCallback(() => {
+
+},[])
 
     return (
     <Grid sx={{ textAlign: "center" }}>
@@ -93,7 +97,7 @@ const submitNewPost = async () => {
           <Button onClick={handleCloseDialog} variant='contained' color='primary'>Create new post</Button>
           <Grid xs={12} container>
           {posts?.map((item,index)  => (
-              <Grid xs={4} item sx={{padding:'5px', margin:'10px',border:'1px black solid'}}>
+              <Grid xs={4} item sx={{padding:'5px', margin:'10px',border:'1px black solid'}} key={index}>
                   <h5>{item.title}</h5>
                   <h6>{item.description}</h6>
                   <img alt='' width='150px' src={item.picture}/>
@@ -119,9 +123,11 @@ const submitNewPost = async () => {
             </DialogContent>
         </Dialog>
         }
-        {showDeleteDialog && <Dialog>
-
-        </Dialog>}
+        {showDeleteDialog &&
+            <Dialog onClose={() => handleSubmitDelete()}>
+                <h1>Confirm</h1>
+        </Dialog>
+        }
     </Grid>
   );
 };
