@@ -7,7 +7,8 @@ import {getLoginCredentials, setError, setLoginResponse} from '../../redux/actio
 export const Login = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate();
-  const data = useSelector(state => state.loginReducer)
+  const data = useSelector(state => state.loginState)
+    console.log(data)
 
   const handleSendData = async () => {
       try {

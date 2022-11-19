@@ -2,29 +2,27 @@ import { Box, Button, Grid, Paper, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {setRegistrationCredentials} from "../../redux/actions/registration";
 
 export const Registration = () => {
-  const [registrationData, setRegistrationData] = useState({
-    username: "",
-    phone: 0,
-    password: "",
-    email: "",
-    confirmationPassword: "",
-  });
+  const dispatch = useDispatch();
+  const data = useSelector(state => state.registrationState)
+  const {username,phone,password,confirmationPassword,email} = data || {};
   const [validation, setValidation] = useState(false);
   const [isPasswordsValid, setIsPasswordsValid] = useState(false);
   const navigate = useNavigate();
 
   const sendRegisteredData = async () => {
     try {
-       const registerUser = await axios.post(
+       await axios.post(
         "http://localhost:8080/registration",
         {
-          username: registrationData.username,
-          email: registrationData.email,
-          phone: registrationData.phone,
-          password: registrationData.password,
-          confirmPassword: registrationData.confirmationPassword,
+          username: username,
+          email: email,
+          phone: phone,
+          password: password,
+          confirmPassword: confirmationPassword,
         }
       );
       navigate("/login");
@@ -36,23 +34,19 @@ export const Registration = () => {
 
   useEffect(() => {
     if (
-      registrationData?.password === registrationData?.confirmationPassword &&
-      registrationData.password.length > 1
+      password === confirmationPassword &&
+      password.length > 1
     ) {
       setIsPasswordsValid(true);
     } else setIsPasswordsValid(false);
 
     if (
-      registrationData?.email.includes("@") &&
-      registrationData.email.length > 1
+      email.includes("@") &&
+      email.length > 1
     ) {
       setValidation(true);
     } else setValidation(false);
-  }, [registrationData, validation, isPasswordsValid]);
-
-  const handleFieldChange = (field, e) => {
-    setRegistrationData({ ...registrationData, [field]: e.target.value });
-  };
+  }, [password,confirmationPassword,email]);
 
   return (
     <Box sx={{ textAlign: "center", margin: "120px" }}>
@@ -69,7 +63,7 @@ export const Registration = () => {
           <Grid xs={12} item>
             <TextField
               placeholder="Enter your username"
-              onChange={(e) => handleFieldChange("username", e)}
+              onChange={(e) => dispatch(setRegistrationCredentials("username", e.target.value))}
               fullWidth
             />
           </Grid>
@@ -83,7 +77,7 @@ export const Registration = () => {
             <TextField
               placeholder="Enter your email"
               fullWidth
-              onChange={(e) => handleFieldChange("email", e)}
+              onChange={(e) => dispatch(setRegistrationCredentials("email", e.target.value))}
               error={!validation}
               type="email"
               helperText={!validation && "Please enter valid email!"}
@@ -93,7 +87,7 @@ export const Registration = () => {
             <TextField
               placeholder="Enter your phone"
               fullWidth
-              onChange={(e) => handleFieldChange("phone", e)}
+              onChange={(e) => dispatch(setRegistrationCredentials("phone", e.target.value))}
             />
           </Grid>
         </Grid>
@@ -101,7 +95,7 @@ export const Registration = () => {
           <Grid xs={6} item>
             <TextField
               placeholder="Enter your password"
-              onChange={(e) => handleFieldChange("password", e)}
+              onChange={(e) => dispatch(setRegistrationCredentials("password", e.target.value))}
               fullWidth
               error={!isPasswordsValid}
               helperText={!isPasswordsValid && "Passwords don t match"}
@@ -111,7 +105,7 @@ export const Registration = () => {
           <Grid xs={6} item>
             <TextField
               placeholder="Enter your password confirmation"
-              onChange={(e) => handleFieldChange("confirmationPassword", e)}
+              onChange={(e) => dispatch(setRegistrationCredentials("confirmationPassword", e.target.value))}
               error={!isPasswordsValid}
               helperText={!isPasswordsValid && "Passwords dont match"}
               fullWidth

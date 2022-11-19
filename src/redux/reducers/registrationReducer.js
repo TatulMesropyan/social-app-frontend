@@ -1,19 +1,17 @@
 
 const initialState = {
-
+	username: "",
+	phone: 0,
+	password: "",
+	email: "",
+	confirmationPassword: "",
 };
 
 export const registrationReducer = (state = initialState,action) => {
+	console.log(state)
 	switch (action.type) {
-		case "GET_LOGIN_CREDENTIALS" :
+		case "SET_REGISTRATION_DATA" :
 			return {...state, [action.field]: action.value};
-		case "SET_LOGIN_RESPONSE" :
-			sessionStorage.setItem("Token",action.token);
-			return {
-				...state,
-				user: action.user,
-				token: action.token,
-			};
 		case "SET_ERROR" :
 			return {
 				...state,
