@@ -1,6 +1,6 @@
 export const setRegistrationCredentials = (field, value) => (
 	{
-		type: "SET_REGISTRATION_CREDENTIALS",
+		type: "SET_REGISTRATION_DATA",
 		field: field,
 		value: value,
 	}
