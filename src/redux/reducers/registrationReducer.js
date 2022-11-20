@@ -7,14 +7,14 @@ const initialState = {
 	confirmationPassword: "",
 };
 
-export const registrationReducer = (state = initialState,action) => {
+export const registrationReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case "SET_REGISTRATION_DATA" :
-			return {...state, [action.field]: action.value};
-		case "SET_ERROR" :
+		case "SET_REGISTRATION_DATA":
+			return { ...state, [action.field]: action.value };
+		case "SET_ERROR":
 			return {
 				...state,
-				error:action.error,
+				error: action.error,
 			};
 		default:
 			return state
