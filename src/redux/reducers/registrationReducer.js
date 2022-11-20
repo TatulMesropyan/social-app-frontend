@@ -8,7 +8,6 @@ const initialState = {
 };
 
 export const registrationReducer = (state = initialState,action) => {
-	console.log(state)
 	switch (action.type) {
 		case "SET_REGISTRATION_DATA" :
 			return {...state, [action.field]: action.value};

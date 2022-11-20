@@ -2,13 +2,13 @@ import {Box, Button, Paper, TextField, Typography} from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
+
 import {getLoginCredentials, setError, setLoginResponse} from '../../redux/actions/login';
 
 export const Login = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate();
   const data = useSelector(state => state.loginState)
-    console.log(data)
 
   const handleSendData = async () => {
       try {

@@ -1,40 +1,41 @@
 import {Box, Button, Dialog, DialogContent, Divider, Grid, Input, Paper, TextField, Typography} from "@mui/material";
 import {useCallback, useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
 import {RemoveCircle} from "@mui/icons-material";
 
-export const ProfilePage = ({user}) => {
+import {getPosts, setError, setNewPost} from "../../redux/actions/profile";
+
+export const ProfilePage = () => {
+    const dispatch = useDispatch();
+    const profileData = useSelector(state => state.profileState)
+    const {posts,title,description,picture} = profileData?.posts || {};
+    const loginData = useSelector(state => state?.loginState?.user)
+    const {_id,username,phone,email} = loginData || {};
+
     const [showCreateDialog,setShowCreateDialog] = useState(false)
-    const [showDeleteDialog,setShowDeleteDialog] = useState(false)
-    const [posts,setPosts] = useState([{}])
-    const [newPost,setNewPost] = useState({
-        title:'',
-        description:'',
-        picture:'',
-    })
 
     const handleCloseDialog = useCallback(() => {
         setShowCreateDialog(prev => !prev)
     },[showCreateDialog])
 
-    const { username, email, phone, _id } = user;
-
-    const handleData = (field,value) => {
-        setNewPost({ ...newPost, [field]:value });
-    }
 
 const submitNewPost = async () => {
+        try {
     await axios.post(`http://localhost:8080/profile`,{
-        title: newPost.title,
-        description: newPost.description,
-        picture: newPost.picture,
+        title: title,
+        description:description,
+        picture: picture,
         userId: _id
     },{
         headers: {
             'Authorization':`Bearer ${sessionStorage.getItem("Token")}`
         }
     })
-    handleCloseDialog()
+        }
+        catch (err) {
+            dispatch(setError(err))
+        }
 };
 
 
@@ -44,32 +45,31 @@ const submitNewPost = async () => {
             await axios.delete(`http://localhost:8080/profile/${postId}`,{
                 headers: {
                 'Authorization':`Bearer ${sessionStorage.getItem("Token")}`
-            },
-                }
-                )
+                },
+            }
+           )
         },
         [posts],
     );
 
-    useEffect(  () => {
+    useEffect(() => {
         const fetchData = async () => {
-            const response = await axios.get(`http://localhost:8080/profile/${_id}/posts`,{
-                headers: {
-                    'authorization': `Bearer ${sessionStorage.getItem("Token")}`
-                }
-            })
-            setPosts(response.data.posts)
+            try {
+                const res = await axios.get(`http://localhost:8080/profile/${_id}/posts`, {
+                    headers: {
+                        'authorization': `Bearer ${sessionStorage.getItem("Token")}`
+                    }
+                })
+                dispatch(getPosts(res.data.posts));
+            } catch (err) {
+                dispatch(setError(err))
+            }
         }
-        fetchData()
-            .catch(console.error);
-    },[_id,showCreateDialog]);
-
-const handleSubmitDelete = useCallback(() => {
-
-},[])
+        fetchData();
+    },[_id, dispatch]);
 
     return (
-    <Grid sx={{ textAlign: "center" }}>
+    <Grid  sx={{ textAlign: "center" }}>
       <Paper>
         <Typography paddingBottom="40px" variant="h1">
           Profile
@@ -96,7 +96,7 @@ const handleSubmitDelete = useCallback(() => {
           </Box>
           <Button onClick={handleCloseDialog} variant='contained' color='primary'>Create new post</Button>
           <Grid xs={12} container>
-          {posts?.map((item,index)  => (
+          {posts.length > 0 && posts?.map((item,index)  => (
               <Grid xs={4} item sx={{padding:'5px', margin:'10px',border:'1px black solid'}} key={index}>
                   <h5>{item.title}</h5>
                   <h6>{item.description}</h6>
@@ -115,17 +115,12 @@ const handleSubmitDelete = useCallback(() => {
                     gap: "40px",
                     justifyContent: "flex-start",
                 }}>
-                    <TextField onChange={(e) => handleData('title', e.target.value)} placeholder='Title'/>
-                    <TextField onChange={(e) => handleData('description', e.target.value)} placeholder='Description'/>
-                    <Input onChange={(e) => handleData('picture',e.target.value)} type="file"/>
+                    <TextField onChange={(e) => dispatch(setNewPost('title', e.target.value))} placeholder='Title'/>
+                    <TextField onChange={(e) => dispatch(setNewPost('description', e.target.value))} placeholder='Description'/>
+                    <Input onChange={(e) => dispatch(setNewPost('picture',e.target.value))} type="file"/>
                     <Button onClick={submitNewPost}>Submit</Button>
                 </Box>
             </DialogContent>
-        </Dialog>
-        }
-        {showDeleteDialog &&
-            <Dialog onClose={() => handleSubmitDelete()}>
-                <h1>Confirm</h1>
         </Dialog>
         }
     </Grid>
