@@ -1,24 +1,24 @@
-import {Box, Button, Dialog, DialogContent, Divider, Grid, Input, Paper, TextField, Typography} from "@mui/material";
+import {Box, Button, Divider, Grid, Paper, Typography} from "@mui/material";
 import {useCallback, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
 import {RemoveCircle} from "@mui/icons-material";
 
-import {getPosts, setError, setNewPost} from "../../redux/actions/profile";
+import {deletePostDialog, getPosts, setError, setNewPost, setNewPostDialog} from "../../redux/actions/profile";
+import {NewPostDialog} from "../ProfilePage/components/NewPostDialog";
+import {DeletePostDialog} from "../ProfilePage/components/DeletePostDialog";
 
 export const ProfilePage = () => {
     const dispatch = useDispatch();
     const profileData = useSelector(state => state.profileState)
-    const {posts,title,description,picture} = profileData?.posts || {};
     const loginData = useSelector(state => state?.loginState?.user)
-    const {_id,username,phone,email} = loginData || {};
+    const {posts, title, description, picture, showCreateDialog, showSubmitDeleteDialog} = profileData || {};
+    const {_id, username, phone, email} = loginData || {};
+    const [confirmDelete,setConfirmDelete] = useState(0)
 
-    const [showCreateDialog,setShowCreateDialog] = useState(false)
-
-    const handleCloseDialog = useCallback(() => {
-        setShowCreateDialog(prev => !prev)
-    },[showCreateDialog])
-
+    const handleNewPostDialog = useCallback(() => {
+        dispatch(setNewPostDialog());
+    },[dispatch])
 
 const submitNewPost = async () => {
         try {
@@ -34,22 +34,45 @@ const submitNewPost = async () => {
     })
         }
         catch (err) {
-            dispatch(setError(err))
+            dispatch(setError(err));
         }
+    handleNewPostDialog()
 };
-
+    const convertToBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(file);
+            fileReader.onload = () => {
+                resolve(fileReader.result);
+            };
+            fileReader.onerror = (error) => {
+                reject(error);
+            };
+        });
+    };
+    const handleFileUpload = async (e) => {
+        const file = e.target.files[0];
+        const base64 = await convertToBase64(file);
+        dispatch(setNewPost( 'picture',base64 ));
+    };
 
 
     const handleDeletePost =  useCallback(
         async (postId) => {
-            await axios.delete(`http://localhost:8080/profile/${postId}`,{
-                headers: {
-                'Authorization':`Bearer ${sessionStorage.getItem("Token")}`
-                },
+            dispatch(deletePostDialog());
+                if(confirmDelete === 1) {
+                    await axios.delete(`http://localhost:8080/profile/${postId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${sessionStorage.getItem("Token")}`
+                        },
+                    })
+                    dispatch(deletePostDialog())
+                }
+                if(confirmDelete === 2){
+                 return dispatch(deletePostDialog());
             }
-           )
         },
-        [posts],
+        [dispatch],
     );
 
     useEffect(() => {
@@ -66,7 +89,7 @@ const submitNewPost = async () => {
             }
         }
         fetchData();
-    },[_id, dispatch]);
+    },[_id, dispatch,showCreateDialog, showSubmitDeleteDialog]);
 
     return (
     <Grid  sx={{ textAlign: "center" }}>
@@ -94,10 +117,10 @@ const submitNewPost = async () => {
               <Divider orientation="horizontal" />
             </Box>
           </Box>
-          <Button onClick={handleCloseDialog} variant='contained' color='primary'>Create new post</Button>
+          <Button onClick={handleNewPostDialog} variant='contained' color='primary'>Create new post</Button>
           <Grid xs={12} container>
-          {posts.length > 0 && posts?.map((item,index)  => (
-              <Grid xs={4} item sx={{padding:'5px', margin:'10px',border:'1px black solid'}} key={index}>
+          {posts?.length > 0 && posts?.map((item,index)  => (
+              <Grid xs={3} item sx={{padding:'5px', margin:'10px',border:'1px black solid'}} key={index}>
                   <h5>{item.title}</h5>
                   <h6>{item.description}</h6>
                   <img alt='' width='150px' src={item.picture}/>
@@ -107,21 +130,18 @@ const submitNewPost = async () => {
           </Grid>
       </Paper>
         {showCreateDialog &&
-        <Dialog onClose={handleCloseDialog} open={showCreateDialog}>
-             <DialogContent>
-                <Box sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "40px",
-                    justifyContent: "flex-start",
-                }}>
-                    <TextField onChange={(e) => dispatch(setNewPost('title', e.target.value))} placeholder='Title'/>
-                    <TextField onChange={(e) => dispatch(setNewPost('description', e.target.value))} placeholder='Description'/>
-                    <Input onChange={(e) => dispatch(setNewPost('picture',e.target.value))} type="file"/>
-                    <Button onClick={submitNewPost}>Submit</Button>
-                </Box>
-            </DialogContent>
-        </Dialog>
+            <NewPostDialog
+                handleNewPostDialog={handleNewPostDialog}
+                showCreateDialog={showCreateDialog}
+                submitNewPost={submitNewPost}
+                handleFileUpload={handleFileUpload}
+            />
+        }
+        {showSubmitDeleteDialog &&
+            <DeletePostDialog
+                setConfirmDelete={setConfirmDelete}
+                showSubmitDeleteDialog={showSubmitDeleteDialog}
+            />
         }
     </Grid>
   );

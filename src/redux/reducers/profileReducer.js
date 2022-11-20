@@ -17,11 +17,21 @@ export const profileReducer = (state = initialState,action) => {
 				...state,
 				posts: action.posts
 			};
+		case "SHOW_CREATE_DIALOG" :
+			return {
+				...state,
+				showCreateDialog: !state.showCreateDialog,
+			}
 		case "SET_ERROR" :
 			return {
 				...state,
 				error:action.error,
 			};
+		case "DELETE_POST_DIALOG" :
+			return {
+				...state,
+				showSubmitDeleteDialog: !state.showSubmitDeleteDialog,
+			}
 		default:
 			return state
 	}
