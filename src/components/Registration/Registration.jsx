@@ -1,9 +1,10 @@
-import { Box, Button, Grid, Paper, TextField, Typography } from "@mui/material";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { setRegistrationCredentials } from "../../redux/actions/registration";
+import { Box, Button, Grid, Paper, TextField, Typography } from '@mui/material';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { setRegistrationCredentials } from '../../redux/actions/registration';
 
 export const Registration = () => {
   const dispatch = useDispatch();
@@ -15,14 +16,14 @@ export const Registration = () => {
 
   const sendRegisteredData = async () => {
     try {
-      await axios.post("http://localhost:8080/registration", {
+      await axios.post('http://localhost:8080/registration', {
         username: username,
         email: email,
         phone: phone,
         password: password,
-        confirmPassword: confirmationPassword,
+        confirmPassword: confirmationPassword
       });
-      navigate("/login");
+      navigate('/login');
     } catch (err) {
       alert(err.response.data.error);
     }
@@ -33,70 +34,58 @@ export const Registration = () => {
       setIsPasswordsValid(true);
     } else setIsPasswordsValid(false);
 
-    if (email.includes("@") && email.length > 1) {
+    if (email.includes('@') && email.length > 1) {
       setValidation(true);
     } else setValidation(false);
   }, [password, confirmationPassword, email]);
 
   return (
-    <Box sx={{ textAlign: "center", margin: "120px" }}>
-      <Paper sx={{ padding: "15px" }}>
+    <Box sx={{ textAlign: 'center', margin: '120px' }}>
+      <Paper sx={{ padding: '15px' }}>
         <Typography paddingBottom="40px" variant="h1">
           KiloGram
         </Typography>
         <Grid
           container
           sx={{
-            textAlign: "center",
+            textAlign: 'center'
           }}
         >
           <Grid xs={12} item>
             <TextField
               placeholder="Enter your username"
-              onChange={(e) =>
-                dispatch(setRegistrationCredentials("username", e.target.value))
-              }
+              onChange={(e) => dispatch(setRegistrationCredentials('username', e.target.value))}
               fullWidth
             />
           </Grid>
         </Grid>
-        <Grid
-          container
-          spacing={2}
-          sx={{ marginTop: "10px", marginBottom: "20px" }}
-        >
+        <Grid container spacing={2} sx={{ marginTop: '10px', marginBottom: '20px' }}>
           <Grid xs={6} item>
             <TextField
               placeholder="Enter your email"
               fullWidth
-              onChange={(e) =>
-                dispatch(setRegistrationCredentials("email", e.target.value))
-              }
+              onChange={(e) => dispatch(setRegistrationCredentials('email', e.target.value))}
               error={!validation}
               type="email"
-              helperText={!validation && "Please enter valid email!"}
+              helperText={!validation && 'Please enter valid email!'}
             />
           </Grid>
           <Grid xs={6} item>
             <TextField
               placeholder="Enter your phone"
               fullWidth
-              onChange={(e) =>
-                dispatch(setRegistrationCredentials("phone", e.target.value))
-              }
+              onChange={(e) => dispatch(setRegistrationCredentials('phone', e.target.value))}
             />
           </Grid>
         </Grid>
-        <Grid container spacing={2} sx={{ marginBottom: "15px" }}>
+        <Grid container spacing={2} sx={{ marginBottom: '15px' }}>
           <Grid xs={6} item>
             <TextField
               placeholder="Enter your password"
-              onChange={(e) =>
-                dispatch(setRegistrationCredentials("password", e.target.value))
-              }
+              onChange={(e) => dispatch(setRegistrationCredentials('password', e.target.value))}
               fullWidth
               error={!isPasswordsValid}
-              helperText={!isPasswordsValid && "Passwords don t match"}
+              helperText={!isPasswordsValid && 'Passwords don t match'}
               type="password"
             />
           </Grid>
@@ -104,22 +93,17 @@ export const Registration = () => {
             <TextField
               placeholder="Enter your password confirmation"
               onChange={(e) =>
-                dispatch(
-                  setRegistrationCredentials(
-                    "confirmationPassword",
-                    e.target.value
-                  )
-                )
+                dispatch(setRegistrationCredentials('confirmationPassword', e.target.value))
               }
               error={!isPasswordsValid}
-              helperText={!isPasswordsValid && "Passwords dont match"}
+              helperText={!isPasswordsValid && 'Passwords dont match'}
               fullWidth
               type="password"
             />
           </Grid>
         </Grid>
         <Button
-          sx={{ padding: "8px 0" }}
+          sx={{ padding: '8px 0' }}
           disabled={!isPasswordsValid || !validation}
           onClick={() => sendRegisteredData()}
           fullWidth

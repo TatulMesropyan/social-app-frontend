@@ -1,15 +1,12 @@
 const initialState = {
-  login: '',
-  password: '',
-  errorCode: 0,
-  errorStatus: '',
-  user: {},
-  token: ''
+  currentPassword: '',
+  confirmationPassword: '',
+  newPassword: ''
 };
 
-export const loginReducer = (state = initialState, action) => {
+export const changePasswordReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'GET_LOGIN_CREDENTIALS':
+    case 'SET_FIELD':
       return { ...state, [action.field]: action.value };
     case 'SET_LOGIN_RESPONSE':
       sessionStorage.setItem('Token', action.token);
