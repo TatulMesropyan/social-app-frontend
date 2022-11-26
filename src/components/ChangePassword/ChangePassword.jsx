@@ -1,10 +1,13 @@
+import { useCallback } from 'react';
 import { TextField } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { setFields } from '../../redux/actions/changePassword';
 
 export const ChangePassword = () => {
   const dispatch = useDispatch();
+  const data = useSelector((state) => state.changePasswordState);
+  console.log(data);
   return (
     <>
       <TextField

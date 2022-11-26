@@ -28,7 +28,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
-    "server": "cdnodemon index.js"
+    "server": "nodemon index.js"
   },
   "eslintConfig": {
     "extends": [
