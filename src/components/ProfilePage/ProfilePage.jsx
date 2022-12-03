@@ -3,23 +3,33 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { RemoveCircle } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 import {
   deletePostDialog,
   getPosts,
   setError,
   setNewPost,
-  setNewPostDialog
+  setNewPostDialog,
+  confirmPostDelete
 } from '../../redux/actions/profile';
 import { NewPostDialog } from '../ProfilePage/components/NewPostDialog';
 import { DeletePostDialog } from '../ProfilePage/components/DeletePostDialog';
 
 export const ProfilePage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const profileData = useSelector((state) => state.profileState);
   const loginData = useSelector((state) => state?.loginState?.user);
-  const { posts, title, description, picture, showCreateDialog, showSubmitDeleteDialog } =
-    profileData || {};
+  const {
+    posts,
+    title,
+    description,
+    picture,
+    showCreateDialog,
+    showSubmitDeleteDialog,
+    confirmPostDelete
+  } = profileData || {};
   const { _id, username, phone, email } = loginData || {};
   const [confirmDelete, setConfirmDelete] = useState(0);
 
@@ -128,6 +138,20 @@ export const ProfilePage = () => {
         </Box>
         <Button onClick={handleNewPostDialog} variant="contained" color="primary">
           Create new post
+        </Button>
+        <Button
+          onClick={() => navigate('/profile/change-password')}
+          variant="contained"
+          color="primary"
+        >
+          Change Password
+        </Button>
+        <Button
+          onClick={() => navigate('/profile/change-email')}
+          variant="contained"
+          color="primary"
+        >
+          Change Email
         </Button>
         <Grid xs={12} container>
           {posts?.length > 0 &&

@@ -4,11 +4,11 @@ export const setFields = (field, value) => ({
   value: value
 });
 
-export const sendData = () => ({
-  type: 'SEND_DATA'
+export const setError = () => ({
+  type: 'SET_ERROR'
 });
-export const setLoginResponse = (token, user) => ({
-  type: 'SET_LOGIN_RESPONSE',
-  token,
-  user
+
+export const setResponse = (response) => ({
+  type: 'SET_RESPONSE',
+  response: response
 });

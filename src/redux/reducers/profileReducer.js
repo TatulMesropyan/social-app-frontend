@@ -4,7 +4,8 @@ const initialState = {
   description: '',
   picture: '',
   showCreateDialog: false,
-  showSubmitDeleteDialog: false
+  showSubmitDeleteDialog: false,
+  confirmPostDelete: false
 };
 
 export const profileReducer = (state = initialState, action) => {
@@ -30,6 +31,12 @@ export const profileReducer = (state = initialState, action) => {
       return {
         ...state,
         showSubmitDeleteDialog: !state.showSubmitDeleteDialog
+      };
+    case 'CONFIRM_POST_DELETE':
+      return {
+        ...state,
+        confirmPostDelete: action.value,
+        showSubmitDeleteDialog: false
       };
     default:
       return state;

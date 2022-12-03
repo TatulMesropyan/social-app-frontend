@@ -26,7 +26,13 @@ export const Login = () => {
   return (
     <Box sx={{ textAlign: 'center', margin: '120px' }}>
       <Paper sx={{ padding: '35px' }}>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '20px'
+          }}
+        >
           <Typography paddingBottom="40px" variant="h1">
             Login
           </Typography>

@@ -18,6 +18,10 @@ export const setNewPostDialog = () => ({
   type: 'SHOW_CREATE_DIALOG'
 });
 
+export const confirmPostDelete = () => ({
+  type: 'CONFIRM_POST_DELETE'
+});
+
 export const deletePostDialog = () => ({
   type: 'DELETE_POST_DIALOG'
 });
