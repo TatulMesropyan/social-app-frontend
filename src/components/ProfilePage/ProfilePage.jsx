@@ -2,9 +2,8 @@ import { Box, Button, Divider, Grid, Paper, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { RemoveCircle } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-
+/* eslint-disable no-unused-vars */
 import {
   deletePostDialog,
   getPosts,
@@ -15,6 +14,7 @@ import {
 } from '../../redux/actions/profile';
 import { NewPostDialog } from '../ProfilePage/components/NewPostDialog';
 import { DeletePostDialog } from '../ProfilePage/components/DeletePostDialog';
+import { SinglePost } from '../ProfilePage/components/SinglePost';
 
 export const ProfilePage = () => {
   const dispatch = useDispatch();
@@ -76,24 +76,6 @@ export const ProfilePage = () => {
     dispatch(setNewPost('picture', base64));
   };
 
-  const handleDeletePost = useCallback(
-    async (postId) => {
-      dispatch(deletePostDialog());
-      if (confirmDelete === 1) {
-        await axios.delete(`http://localhost:8080/profile/${postId}`, {
-          headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('Token')}`
-          }
-        });
-        dispatch(deletePostDialog());
-      }
-      if (confirmDelete === 2) {
-        return dispatch(deletePostDialog());
-      }
-    },
-    [dispatch]
-  );
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -108,7 +90,7 @@ export const ProfilePage = () => {
       }
     };
     fetchData();
-  }, [_id, dispatch, showCreateDialog, showSubmitDeleteDialog]);
+  }, []);
 
   return (
     <Grid sx={{ textAlign: 'center' }}>
@@ -153,28 +135,17 @@ export const ProfilePage = () => {
         >
           Change Email
         </Button>
-        <Grid xs={12} container>
-          {posts?.length > 0 &&
-            posts?.map((item, index) => (
-              <Grid xs={4} item key={index}>
-                <Grid container xs={12} direction="column" alignItems="center" sx={{}}>
-                  <Grid item xs={3}>
-                    <h5>{item.title}</h5>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <h6>{item.description}</h6>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <img alt="" width="150px" src={item.picture} />
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Button onClick={() => handleDeletePost(item['_id'])} variant="contained">
-                      Delete post <RemoveCircle />
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-            ))}
+        <Grid xs={12} container textAlign="center">
+          {posts?.map((item, index) => (
+            <Grid xs={4} item key={index}>
+              <SinglePost
+                title={item.title}
+                description={item.description}
+                picture={item.picture}
+                postID={item['_id']}
+              />
+            </Grid>
+          ))}
         </Grid>
       </Paper>
       {showCreateDialog && (
