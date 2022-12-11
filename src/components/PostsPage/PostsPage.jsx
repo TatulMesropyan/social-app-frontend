@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Grid, Paper, Typography } from '@mui/material';
+import { Button, Grid, Paper } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
@@ -11,12 +11,13 @@ import {
   setNewPost,
   setNewPostDialog,
   confirmPostDelete
-} from '../../redux/actions/profile';
-import { NewPostDialog } from '../ProfilePage/components/NewPostDialog';
-import { DeletePostDialog } from '../ProfilePage/components/DeletePostDialog';
-import { SinglePost } from '../ProfilePage/components/SinglePost';
+} from '../../redux/actions/postsReducer';
+import { NewPostDialog } from './components/NewPostDialog';
+import { DeletePostDialog } from './components/DeletePostDialog';
+import { SinglePost } from './components/SinglePost';
+import { OpenedPost } from './components/OpenedPost';
 
-export const ProfilePage = () => {
+export const PostsPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const profileData = useSelector((state) => state.profileState);
@@ -28,10 +29,11 @@ export const ProfilePage = () => {
     picture,
     showCreateDialog,
     showSubmitDeleteDialog,
-    confirmPostDelete
+    openSingleDialog
   } = profileData || {};
-  const { _id, username, phone, email } = loginData || {};
+  const { _id } = loginData || {};
   const [confirmDelete, setConfirmDelete] = useState(0);
+  const [openedPostId, setOpenedPostId] = useState(null);
 
   const handleNewPostDialog = useCallback(() => {
     dispatch(setNewPostDialog());
@@ -90,64 +92,41 @@ export const ProfilePage = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [_id, dispatch, showCreateDialog, showSubmitDeleteDialog]);
 
+  const getExactPost = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8080//profile/${_id}/posts/${openedPostId}`, {
+        headers: {
+          authorization: `Bearer ${sessionStorage.getItem('Token')}`
+        }
+      });
+    } catch (err) {
+      dispatch(setError(err));
+    }
+  };
   return (
-    <Grid sx={{ textAlign: 'center' }}>
-      <Paper>
-        <Typography paddingBottom="40px" variant="h1">
-          Profile
-        </Typography>
-        <Box
-          sx={{
-            display: 'flex',
-            direction: 'column',
-            justifyContent: 'space-between'
-          }}
-        >
-          <Box sx={{ display: 'flex', direction: 'row' }}>
-            <Typography variant="h6">Username: {username}</Typography>
-            <Divider />
-          </Box>
-          <Box sx={{ display: 'flex', direction: 'row' }}>
-            <Typography variant="h6">Email: {email}</Typography>
-            <Divider orientation="horizontal" />
-          </Box>
-          <Box sx={{ display: 'flex', direction: 'row' }}>
-            <Typography variant="h6">Phone: {phone}</Typography>
-            <Divider orientation="horizontal" />
-          </Box>
-        </Box>
-        <Button onClick={handleNewPostDialog} variant="contained" color="primary">
-          Create new post
-        </Button>
-        <Button
-          onClick={() => navigate('/profile/change-password')}
-          variant="contained"
-          color="primary"
-        >
-          Change Password
-        </Button>
-        <Button
-          onClick={() => navigate('/profile/change-email')}
-          variant="contained"
-          color="primary"
-        >
-          Change Email
-        </Button>
-        <Grid xs={12} container textAlign="center">
+    <>
+      <Button onClick={handleNewPostDialog} fullWidth variant="contained" color="success">
+        Create new post
+      </Button>
+      <Paper sx={{ textAlign: 'center', marginTop: '10px' }}>
+        <Grid spacing={5} container>
           {posts?.map((item, index) => (
-            <Grid xs={4} item key={index}>
+            <Grid xs={4} item key={index} spacing={2}>
               <SinglePost
+                userID={_id}
                 title={item.title}
                 description={item.description}
                 picture={item.picture}
                 postID={item['_id']}
+                setOpenedPostId={setOpenedPostId}
               />
             </Grid>
           ))}
         </Grid>
       </Paper>
+      {openSingleDialog && <OpenedPost />}
       {showCreateDialog && (
         <NewPostDialog
           handleNewPostDialog={handleNewPostDialog}
@@ -162,6 +141,6 @@ export const ProfilePage = () => {
           showSubmitDeleteDialog={showSubmitDeleteDialog}
         />
       )}
-    </Grid>
+    </>
   );
 };

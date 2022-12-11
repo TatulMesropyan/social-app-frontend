@@ -5,10 +5,12 @@ const initialState = {
   picture: '',
   showCreateDialog: false,
   showSubmitDeleteDialog: false,
-  confirmPostDelete: false
+  confirmPostDelete: false,
+  openedPost: {},
+  openSingleDialog: false
 };
 
-export const profileReducer = (state = initialState, action) => {
+export const postsReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET_NEW_POST':
       return { ...state, [action.field]: action.value };
@@ -37,6 +39,17 @@ export const profileReducer = (state = initialState, action) => {
         ...state,
         confirmPostDelete: action.value,
         showSubmitDeleteDialog: false
+      };
+    case 'OPENED_POST':
+      return {
+        ...state,
+        openedPost: action.post,
+        openSingleDialog: true
+      };
+    case 'POST_DIALOG':
+      return {
+        ...state,
+        openSingleDialog: !state.openSingleDialog
       };
     default:
       return state;

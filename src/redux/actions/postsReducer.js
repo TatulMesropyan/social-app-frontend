@@ -25,3 +25,12 @@ export const confirmPostDelete = () => ({
 export const deletePostDialog = () => ({
   type: 'DELETE_POST_DIALOG'
 });
+
+export const getOpenedPostData = (post) => ({
+  type: 'OPENED_POST',
+  post: post
+});
+
+export const postDialog = () => ({
+  type: 'POST_DIALOG'
+});

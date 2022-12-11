@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Button, Dialog, DialogContent, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 
-import { deletePostDialog } from '../../../redux/actions/profile';
+import { deletePostDialog } from '../../../redux/actions/postsReducer';
 
 export const DeletePostDialog = ({ setConfirmDelete, showSubmitDeleteDialog }) => {
   const dispatch = useDispatch();

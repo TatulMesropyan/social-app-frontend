@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Button, Dialog, DialogContent, Input, TextField, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 
-import { setNewPost } from '../../../redux/actions/profile';
+import { setNewPost } from '../../../redux/actions/postsReducer';
 
 export const NewPostDialog = ({
   handleNewPostDialog,
