@@ -10,7 +10,7 @@ function App() {
     <Routes>
       <Route path={'/'} exact element={<Registration />} />
       <Route path={'/login'} exact element={<Login />} />
-      <Route path={'/profile'} exact element={<PostsPage />} />
+      <Route path={'/posts'} exact element={<PostsPage />} />
       <Route path={`/profile/change-password`} exact element={<ChangePassword />} />
     </Routes>
   );

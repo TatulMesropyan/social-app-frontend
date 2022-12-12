@@ -20,7 +20,7 @@ import { OpenedPost } from './components/OpenedPost';
 export const PostsPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const profileData = useSelector((state) => state.profileState);
+  const profileData = useSelector((state) => state.postsState);
   const loginData = useSelector((state) => state?.loginState?.user);
   const {
     posts,
@@ -94,17 +94,6 @@ export const PostsPage = () => {
     fetchData();
   }, [_id, dispatch, showCreateDialog, showSubmitDeleteDialog]);
 
-  const getExactPost = async () => {
-    try {
-      const res = await axios.get(`http://localhost:8080//profile/${_id}/posts/${openedPostId}`, {
-        headers: {
-          authorization: `Bearer ${sessionStorage.getItem('Token')}`
-        }
-      });
-    } catch (err) {
-      dispatch(setError(err));
-    }
-  };
   return (
     <>
       <Button onClick={handleNewPostDialog} fullWidth variant="contained" color="success">
@@ -126,13 +115,14 @@ export const PostsPage = () => {
           ))}
         </Grid>
       </Paper>
-      {openSingleDialog && <OpenedPost />}
+      {openSingleDialog && <OpenedPost postId={openedPostId} />}
       {showCreateDialog && (
         <NewPostDialog
           handleNewPostDialog={handleNewPostDialog}
           showCreateDialog={showCreateDialog}
           submitNewPost={submitNewPost}
           handleFileUpload={handleFileUpload}
+          postId={openedPostId}
         />
       )}
       {showSubmitDeleteDialog && (

@@ -1,6 +1,7 @@
 import { Grid, Typography } from '@mui/material';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
+import { saveAs } from 'file-saver';
 import {
   deletePostDialog,
   getOpenedPostData,
@@ -8,7 +9,7 @@ import {
   setError
 } from '../../../redux/actions/postsReducer';
 
-export const SinglePost = ({ userID, title, description, picture, postID }) => {
+export const SinglePost = ({ userID, title, description, picture, postID, setOpenedPostId }) => {
   const dispatch = useDispatch();
 
   const handleDeletePost = async () => {
@@ -22,6 +23,7 @@ export const SinglePost = ({ userID, title, description, picture, postID }) => {
 
   const getExactPost = async (openedPostId) => {
     try {
+      setOpenedPostId(openedPostId);
       const res = await axios.get(`http://localhost:8080/profile/${userID}/posts/${openedPostId}`, {
         headers: {
           authorization: `Bearer ${sessionStorage.getItem('Token')}`
@@ -32,6 +34,7 @@ export const SinglePost = ({ userID, title, description, picture, postID }) => {
       dispatch(setError(err));
     }
   };
+
   return (
     <Grid
       container

@@ -17,7 +17,7 @@ export const Login = () => {
         password: data.password
       });
       dispatch(setLoginResponse(response.data.token, response.data.user));
-      navigate('/profile');
+      navigate('/posts');
     } catch (e) {
       dispatch(setError(e.data));
     }
